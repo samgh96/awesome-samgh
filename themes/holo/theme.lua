@@ -96,6 +96,8 @@ theme.titlebar_maximized_button_focus_active    = theme.default_dir.."/titlebar/
 
 theme.musicplr = string.format("%s -e ncmpcpp", awful.util.terminal)
 
+awful.util.tagnames   = { "web", "term", "tg", "emacs", "spotify", "media", "pdf", "aux" }
+
 local markup = lain.util.markup
 local blue   = "#80CCE6"
 local space3 = markup.font("Roboto 3", " ")
@@ -180,24 +182,24 @@ musicwidget:buttons(awful.util.table.join(awful.button({ }, 1,
 function () awful.spawn(theme.musicplr) end)))
 prev_icon:buttons(awful.util.table.join(awful.button({}, 1,
 function ()
-    awful.spawn.with_shell("mpc prev")
-    mpd.update()
+    awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+--    mpd.update()
 end)))
 next_icon:buttons(awful.util.table.join(awful.button({}, 1,
 function ()
-    awful.spawn.with_shell("mpc next")
-    mpd.update()
+    awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
+--    mpd.update()
 end)))
 stop_icon:buttons(awful.util.table.join(awful.button({}, 1,
 function ()
     play_pause_icon:set_image(theme.play)
-    awful.spawn.with_shell("mpc stop")
-    mpd.update()
+    awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop")
+--    mpd.update()
 end)))
 play_pause_icon:buttons(awful.util.table.join(awful.button({}, 1,
 function ()
-    awful.spawn.with_shell("mpc toggle")
-    mpd.update()
+    awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+--    mpd.update()
 end)))
 
 -- Battery

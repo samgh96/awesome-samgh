@@ -47,18 +47,14 @@ end
 -- }}}
 
 -- {{{ Autostart windowless processes
-local function run_once(cmd_arr)
-   for _, cmd in ipairs(cmd_arr) do
-      findme = cmd
-      firstspace = cmd:find(" ")
-      if firstspace then
-         findme = cmd:sub(0, firstspace-1)
-      end
-      awful.spawn.with_shell(string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd))
+local function run_once(prg)
+   if not prg then
+      do return nil end
    end
+   awful.util.spawn_with_shell("pgrep -u $USER -x " .. prg .. " || (" .. prg .. ")")
 end
 
-run_once({ "urxvtd", "unclutter -root" })
+-- run_once({ "urxvtd", "unclutter -root" })
 run_once("unclutter -idle 10")
 run_once("xmodmap ~/capswap")
 -- run_once("variety")
@@ -71,10 +67,10 @@ run_once("nm-applet")
 -- }}}
 
 -- {{{ Variable definitions
-local chosen_theme = "dremora"
+local chosen_theme = "holo"
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "terminology" or "xterm"
+local terminal     = "terminator" or "xterm"
 local editor       = os.getenv("EDITOR") or "nano" or "vi"
 local gui_editor   = "emacs"
 local browser      = "chromium"
@@ -199,7 +195,7 @@ screen.connect_signal("property::geometry", function(s)
                          -- Wallpaper
                          if beautiful.wallpaper then
                             local wallpaper = beautiful.wallpaper
-                           -- If wallpaper is a function, call it with the screen
+                            -- If wallpaper is a function, call it with the screen
                             if type(wallpaper) == "function" then
                                wallpaper = wallpaper(s)
                             end
@@ -237,9 +233,9 @@ globalkeys = awful.util.table.join(
 
    -- Non-empty tag browsing
    -- awful.key({ altkey }, "Left", function () lain.util.tag_view_nonempty(-1) end,
-      -- {description = "view  previous nonempty", group = "tag"}),
+   -- {description = "view  previous nonempty", group = "tag"}),
    -- awful.key({ altkey }, "Right", function () lain.util.tag_view_nonempty(1) end,
-      -- {description = "view  previous nonempty", group = "tag"}),
+   -- {description = "view  previous nonempty", group = "tag"}),
 
    -- Default client focus
    awful.key({ altkey,           }, "j",
@@ -308,7 +304,7 @@ globalkeys = awful.util.table.join(
    --          end
    --       end
    -- end),
-   awful.key({modkey,            }, "b", function() awful.util.spawn("xscreensaver-command -lock") end), 
+   awful.key({modkey,            }, "b", function() awful.util.spawn("xscreensaver-command -lock") end),
    -- On the fly useless gaps change
    awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end),
    awful.key({ altkey, "Control" }, "-", function () lain.util.useless_gaps_resize(-1) end),
@@ -493,7 +489,19 @@ clientkeys = awful.util.table.join(
          c.maximized = not c.maximized
          c:raise()
       end ,
-      {description = "maximize", group = "client"})
+      {description = "maximize", group = "client"}),
+   awful.key({ altkey, "Control"}, "p",
+      function(c)
+         awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+   end),
+   awful.key({ altkey, "Control"}, "n",
+      function(c)
+         awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
+   end),
+   awful.key({ altkey, "Control"}, "space",
+      function(c)
+         awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+   end)
 )
 
 -- Bind all key numbers
