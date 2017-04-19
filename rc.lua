@@ -70,7 +70,7 @@ run_once("nm-applet")
 local chosen_theme = "holo"
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "terminator" or "xterm"
+local terminal     = "terminology" or "xterm"
 local editor       = os.getenv("EDITOR") or "nano" or "vi"
 local gui_editor   = "emacs"
 local browser      = "chromium"
@@ -501,6 +501,12 @@ clientkeys = awful.util.table.join(
    awful.key({ altkey, "Control"}, "space",
       function(c)
          awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+   end),
+   awful.key({ modkey }, "KP_Add",
+      function(c) awful.spawn.with_shell("amixer -D pulse sset Master 5%+")
+   end),
+   awful.key({ modkey }, "KP_Subtract",
+      function(c) awful.spawn.with_shell("amixer -D pulse sset Master 5%-")
    end)
 )
 
