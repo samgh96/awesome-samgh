@@ -1,9 +1,9 @@
 
 --[[
-                                  
-     Rainbow Awesome WM theme 2.0 
-     github.com/copycat-killer    
-                                  
+
+   Rainbow Awesome WM theme 2.0
+   github.com/copycat-killer
+
 --]]
 
 local gears = require("gears")
@@ -15,8 +15,8 @@ local os    = { getenv = os.getenv }
 local theme                                     = {}
 theme.default_dir                               = require("awful.util").get_themes_dir() .. "default"
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/rainbow"
-theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.font                                      = "Misc Tamsyn 10.5"
+theme.wallpaper                                 = theme.dir .. "../holo/qotsa.png"
+theme.font                                      = "Hack Regular 10.5"
 theme.fg_normal                                 = "#9E9E9E"
 theme.fg_focus                                  = "#EBEBFF"
 theme.bg_normal                                 = "#242424"
@@ -92,110 +92,166 @@ mytextclock.font = theme.font
 
 -- Calendar
 lain.widget.calendar({
-    attach_to = { mytextclock },
-    notification_preset = {
-        font = "Misc Tamsyn 11",
-        fg   = white,
-        bg   = theme.bg_normal
-    }
+      attach_to = { mytextclock },
+      notification_preset = {
+         font = "Misc Tamsyn 11",
+         fg   = white,
+         bg   = theme.bg_normal
+      }
 })
+
+-- spotify
+-- spotify_widget = wibox.widget.textbox()
+-- spotify_widget:set_font('Roboto 8')
+-- spotify_widget:connect_signal("button::release", function() awful.spawn('sp play'); end)
+
+-- -- optional icon, could be replaced by spotfiy logo (https://developer.spotify.com/design/)
+-- -- to use spotify_icon install ARC (https://github.com/horst3180/arc-icon-theme), copy Arc folder to /usr/share/icons
+-- spotify_icon = wibox.widget.imagebox()
+-- spotify_icon:set_image("/usr/share/icons/Arc/devices/22/audio-headphones.png")
+
+-- watch(
+--    "sp current-oneline", 1,
+--    function(widget, stdout, stderr, exitreason, exitcode)
+--       spotify_widget:set_text(stdout)
+--    end
+-- )
 
 --[[ Mail IMAP check
--- commented because it needs to be set before use
-local mail = lain.widget.imap({
-    timeout  = 180,
-    server   = "server",
-    mail     = "mail",
-    password = "keyring get mail",
-    settings = function()
-        mail_notification_preset.fg = white
+   -- commented because it needs to be set before use
+   local mail = lain.widget.imap({
+   timeout  = 180,
+   server   = "server",
+   mail     = "mail",
+   password = "keyring get mail",
+   settings = function()
+   mail_notification_preset.fg = white
 
-        mail  = ""
-        count = ""
+   mail  = ""
+   count = ""
 
-        if mailcount > 0 then
-            mail = "Mail "
-            count = mailcount .. " "
-        end
+   if mailcount > 0 then
+   mail = "Mail "
+   count = mailcount .. " "
+   end
 
-        widget:set_markup(markup.font(theme.font, markup(gray, mail) .. markup(white, count)))
-    end
-})
+   widget:set_markup(markup.font(theme.font, markup(gray, mail) .. markup(white, count)))
+   end
+   })
 ]]
 
 -- MPD
 theme.mpd = lain.widget.mpd({
-    settings = function()
-        mpd_notification_preset.fg = white
+      settings = function()
+         mpd_notification_preset.fg = white
 
-        artist = mpd_now.artist .. " "
-        title  = mpd_now.title  .. " "
+         artist = mpd_now.artist .. " "
+         title  = mpd_now.title  .. " "
 
-        if mpd_now.state == "pause" then
+         if mpd_now.state == "pause" then
             artist = "mpd "
             title  = "paused "
-        elseif mpd_now.state == "stop" then
+         elseif mpd_now.state == "stop" then
             artist = ""
             title  = ""
-        end
+         end
 
-        widget:set_markup(markup.font(theme.font, markup(gray, artist) .. markup(white, title)))
-    end
+         widget:set_markup(markup.font(theme.font, markup(gray, artist) .. markup(white, title)))
+      end
 })
+-- local musicbg = wibox.container.background(theme.mpd.widget, theme.bg_focus, gears.shape.rectangle)
+-- local musicwidget = wibox.container.margin(musicbg, 0, 0, 5, 5)
+
+
+
+-- musicwidget:buttons(awful.util.table.join(awful.button({ }, 1,
+--                                              function () awful.spawn(theme.musicplr) end)))
+-- prev_icon:buttons(awful.util.table.join(awful.button({}, 1,
+--                                            function ()
+--                                               awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+--                                               --    mpd.update()
+-- end)))
+-- next_icon:buttons(awful.util.table.join(awful.button({}, 1,
+--                                            function ()
+--                                               awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
+--                                               --    mpd.update()
+-- end)))
+-- stop_icon:buttons(awful.util.table.join(awful.button({}, 1,
+--                                            function ()
+--                                               play_pause_icon:set_image(theme.play)
+--                                               awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop")
+--                                               --    mpd.update()
+-- end)))
+-- play_pause_icon:buttons(awful.util.table.join(awful.button({}, 1,
+--                                                  function ()
+--                                                     awful.spawn.with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+--                                                     --    mpd.update()
+-- end)))
+
+-- CPU
+-- local cpu_icon = wibox.widget.imagebox(theme.cpu)
+-- local cpu = lain.widget.cpu({
+--       settings = function()
+--          widget:set_markup(space3 .. markup.font(theme.font, "CPU " .. cpu_now.usage
+--                                                     .. "% ") .. markup.font("Roboto 5", " "))
+--       end
+-- })
+-- local cpubg = wibox.container.background(cpu.widget, theme.bg_focus, gears.shape.rectangle)
+-- local cpuwidget = wibox.container.margin(cpubg, 0, 0, 5, 5)
 
 -- /home fs
 theme.fs = lain.widget.fs({
-    partition = "/home",
-    options = "--exclude-type=tmpfs",
-    notification_preset = { fg = white, bg = theme.bg_normal, font = "Misc Tamsyn 10.5" },
-    settings  = function()
-        hdd = ""
-        p   = ""
+      partition = "/home",
+      options = "--exclude-type=tmpfs",
+      notification_preset = { fg = white, bg = theme.bg_normal, font = "Misc Tamsyn 10.5" },
+      settings  = function()
+         hdd = ""
+         p   = ""
 
-        if tonumber(fs_now.used) >= 90 then
+         if tonumber(fs_now.used) >= 90 then
             hdd = " Hdd "
             p   = fs_now.used .. " "
-        end
+         end
 
-        widget:set_markup(markup.font(theme.font, markup(gray, hdd) .. markup(white, p)))
-    end
+         widget:set_markup(markup.font(theme.font, markup(gray, hdd) .. markup(white, p)))
+      end
 })
 
 -- ALSA volume bar
 theme.volume = lain.widget.alsabar({
-    ticks = true, width = 67,
-    notification_preset = { font = theme.font }
+      ticks = true, width = 67,
+      notification_preset = { font = theme.font }
 })
 theme.volume.tooltip.wibox.fg = theme.fg_focus
 theme.volume.tooltip.wibox.font = theme.font
 theme.volume.bar:buttons(awful.util.table.join (
-          awful.button({}, 1, function()
-            awful.spawn.with_shell(string.format("%s -e alsamixer", terminal))
-          end),
-          awful.button({}, 2, function()
-            awful.spawn(string.format("%s set %s 100%%", theme.volume.cmd, theme.volume.channel))
-            theme.volume.update()
-          end),
-          awful.button({}, 3, function()
-            awful.spawn(string.format("%s set %s toggle", theme.volume.cmd, theme.volume.togglechannel or theme.volume.channel))
-            theme.volume.update()
-          end),
-          awful.button({}, 4, function()
-            awful.spawn(string.format("%s set %s 1%%+", theme.volume.cmd, theme.volume.channel))
-            theme.volume.update()
-          end),
-          awful.button({}, 5, function()
-            awful.spawn(string.format("%s set %s 1%%-", theme.volume.cmd, theme.volume.channel))
-            theme.volume.update()
-          end)
+                            awful.button({}, 1, function()
+                                  awful.spawn.with_shell(string.format("%s -e alsamixer", terminal))
+                            end),
+                            awful.button({}, 2, function()
+                                  awful.spawn(string.format("%s set %s 100%%", theme.volume.cmd, theme.volume.channel))
+                                  theme.volume.update()
+                            end),
+                            awful.button({}, 3, function()
+                                  awful.spawn(string.format("%s set %s toggle", theme.volume.cmd, theme.volume.togglechannel or theme.volume.channel))
+                                  theme.volume.update()
+                            end),
+                            awful.button({}, 4, function()
+                                  awful.spawn(string.format("%s set %s 1%%+", theme.volume.cmd, theme.volume.channel))
+                                  theme.volume.update()
+                            end),
+                            awful.button({}, 5, function()
+                                  awful.spawn(string.format("%s set %s 1%%-", theme.volume.cmd, theme.volume.channel))
+                                  theme.volume.update()
+                            end)
 ))
 local volumebg = wibox.container.background(theme.volume.bar, "#585858", gears.shape.rectangle)
 local volumewidget = wibox.container.margin(volumebg, 7, 7, 5, 5)
 
 -- Weather
 theme.weather = lain.widget.weather({
-    city_id = 2643743, -- placeholder (London)
-    notification_preset = { font = theme.font, fg = white }
+      city_id = 2643743, -- placeholder (London)
+      notification_preset = { font = theme.font, fg = white }
 })
 
 -- Separators
@@ -203,71 +259,75 @@ local first = wibox.widget.textbox(markup.font("Misc Tamsyn 4", " "))
 local spr   = wibox.widget.textbox(' ')
 
 local function update_txt_layoutbox(s)
-    -- Writes a string representation of the current layout in a textbox widget
-    local txt_l = theme["layout_txt_" .. awful.layout.getname(awful.layout.get(s))] or ""
-    s.mytxtlayoutbox:set_text(txt_l)
+   -- Writes a string representation of the current layout in a textbox widget
+   local txt_l = theme["layout_txt_" .. awful.layout.getname(awful.layout.get(s))] or ""
+   s.mytxtlayoutbox:set_text(txt_l)
 end
 
 function theme.at_screen_connect(s)
-    -- Quake application
-    s.quake = lain.util.quake({ app = awful.util.terminal })
+   -- Quake application
+   s.quake = lain.util.quake({ app = awful.util.terminal })
 
-    -- If wallpaper is a function, call it with the screen
-    if type(wallpaper) == "function" then
-        theme.wallpaper = theme.wallpaper(s)
-    end
-    gears.wallpaper.maximized(theme.wallpaper, s, true)
+   -- If wallpaper is a function, call it with the screen
+   if type(wallpaper) == "function" then
+      theme.wallpaper = theme.wallpaper(s)
+   end
+   gears.wallpaper.maximized(theme.wallpaper, s, true)
 
-    -- Tags
-    awful.tag(awful.util.tagnames, s, awful.layout.layouts)
+   -- Tags
+   awful.tag(awful.util.tagnames, s, awful.layout.layouts)
 
-    -- Create a promptbox for each screen
-    s.mypromptbox = awful.widget.prompt()
+   -- Create a promptbox for each screen
+   s.mypromptbox = awful.widget.prompt()
 
-    -- Textual layoutbox
-    s.mytxtlayoutbox = wibox.widget.textbox(theme["layout_txt_" .. awful.layout.getname(awful.layout.get(s))])
-    awful.tag.attached_connect_signal(s, "property::selected", function () update_txt_layoutbox(s) end)
-    awful.tag.attached_connect_signal(s, "property::layout", function () update_txt_layoutbox(s) end)
-    s.mytxtlayoutbox:buttons(awful.util.table.join(
-                           awful.button({}, 1, function() awful.layout.inc(1) end),
-                           awful.button({}, 3, function() awful.layout.inc(-1) end),
-                           awful.button({}, 4, function() awful.layout.inc(1) end),
-                           awful.button({}, 5, function() awful.layout.inc(-1) end)))
+   -- Textual layoutbox
+   s.mytxtlayoutbox = wibox.widget.textbox(theme["layout_txt_" .. awful.layout.getname(awful.layout.get(s))])
+   awful.tag.attached_connect_signal(s, "property::selected", function () update_txt_layoutbox(s) end)
+   awful.tag.attached_connect_signal(s, "property::layout", function () update_txt_layoutbox(s) end)
+   s.mytxtlayoutbox:buttons(awful.util.table.join(
+                               awful.button({}, 1, function() awful.layout.inc(1) end),
+                               awful.button({}, 3, function() awful.layout.inc(-1) end),
+                               awful.button({}, 4, function() awful.layout.inc(1) end),
+                               awful.button({}, 5, function() awful.layout.inc(-1) end)))
 
-    -- Create a taglist widget
-    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
+   -- Create a taglist widget
+   s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
 
-    -- Create a tasklist widget
-    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
+   -- Create a tasklist widget
+   s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
-    -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 18, bg = theme.bg_normal, fg = theme.fg_normal })
+   -- Create the wibox
+   s.mywibox = awful.wibar({ position = "top", screen = s, height = 18, bg = theme.bg_normal, fg = theme.fg_normal })
 
-    -- Add widgets to the wibox
-    s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
-        { -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-            first,
-            s.mytaglist,
-            spr,
-            s.mytxtlayoutbox,
-            --spr,
-            s.mypromptbox,
-            spr,
-        },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            wibox.widget.systray(),
-            spr,
-            theme.mpd.widget,
-            --mail.widget,
-            theme.fs.widget,
-            volumewidget,
-            mytextclock,
-        },
-    }
+   -- Add widgets to the wibox
+   s.mywibox:setup {
+      layout = wibox.layout.align.horizontal,
+      { -- Left widgets
+         layout = wibox.layout.fixed.horizontal,
+         first,
+         s.mytaglist,
+         spr,
+         s.mytxtlayoutbox,
+         --spr,
+         s.mypromptbox,
+         spr,
+         spotify_icon,
+         spotify_widget,
+      },
+      s.mytasklist, -- Middle widget
+      { -- Right widgets
+
+         layout = wibox.layout.fixed.horizontal,
+         wibox.widget.systray(),
+--         battery.widget,
+         spr,
+         theme.mpd.widget,
+         --mail.widget,
+         theme.fs.widget,
+         volumewidget,
+         mytextclock,
+      },
+   }
 end
 
 return theme

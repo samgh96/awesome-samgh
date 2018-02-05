@@ -67,16 +67,16 @@ run_once("nm-applet")
 -- }}}
 
 -- {{{ Variable definitions
-local chosen_theme = "holo"
+local chosen_theme = "powerarrow"
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "terminology" or "xterm"
+local terminal     = "terminator" or "xterm"
 local editor       = os.getenv("EDITOR") or "nano" or "vi"
 local gui_editor   = "emacs"
 local browser      = "chromium"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5", "6", "7", "8" }
+awful.util.tagnames = { "web", "term", "emacs", "tg", "pdf", "spotify", "sw4g", "slack" }
 awful.layout.layouts = {
    awful.layout.suit.floating,
    awful.layout.suit.tile,
